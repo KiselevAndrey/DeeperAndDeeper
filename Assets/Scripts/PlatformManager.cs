@@ -50,7 +50,11 @@ public class PlatformManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        BallHit(_damage);
+        if(Ball.singleton.transform.position.y > transform.position.y)
+        {
+            BallHit(_damage);
+            SetType(Type.Start);
+        }
     }
     #endregion
 }

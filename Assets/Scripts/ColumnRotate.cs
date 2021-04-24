@@ -32,6 +32,8 @@ public class ColumnRotate : MonoBehaviour
     #region Rotate
     void Rotate()
     {
+        if (Time.timeScale == 0f) return;
+
         switch (_currentPlatform)
         {
             case CurrentPlatform.PC:

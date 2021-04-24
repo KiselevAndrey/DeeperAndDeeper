@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Ball : MonoBehaviour
 {
@@ -11,8 +14,11 @@ public class Ball : MonoBehaviour
     [SerializeField] int maxHealth;
     [SerializeField] float startScale = 0.3f;
     [SerializeField] float minScale = 0.1f;
+    [SerializeField] Text healthText;
 
     int _currentHealth;
+
+    public static Action PlayerDie;
 
     #region Awake OnDestroy Start Update
     void Awake()
@@ -28,12 +34,14 @@ public class Ball : MonoBehaviour
     private void Start()
     {
         _currentHealth = maxHealth;
+        healthText.text = _currentHealth.ToString();
         SetScale();
     }
 
     private void FixedUpdate()
     {
-        if (rb.velocity.magnitude > maxSpeed) rb.velocity = rb.velocity.normalized * maxSpeed;        
+        CheckMaxSpeed();
+        //CheckLowSpeed();
     }
     private void Update()
     {
@@ -41,11 +49,40 @@ public class Ball : MonoBehaviour
     }
     #endregion
 
+    #region Moving
+    void CheckMaxSpeed()
+    {
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            print("maxspeed " + rb.velocity.magnitude);
+            SetSpeed(maxSpeed);
+        }
+    }
+
+    void CheckLowSpeed()
+    {
+        if (rb.velocity.magnitude < 0.1f)
+        {
+            print("lowspeed " + rb.velocity.magnitude);
+            StartCoroutine(StartDown());
+        }
+    }
+
+    IEnumerator StartDown()
+    {
+        yield return new WaitForSeconds(Time.deltaTime);
+        if (rb.velocity.magnitude < 0.1f)
+            SetSpeed(-maxSpeed);
+    }
+
+    void SetSpeed(float speed) => rb.velocity = rb.velocity.normalized * speed;
+    #endregion
+
     #region Hit
     void SetScale()
     {
         float percentHealth = (float)_currentHealth / maxHealth;
-        transform.localScale = Vector3.one * (minScale + (startScale - minScale) * percentHealth);
+        transform.localScale = Vector3.one * Mathf.Lerp(minScale, startScale, percentHealth);// (minScale + (startScale - minScale) * percentHealth);
     }
 
     void Hit(int damage)
@@ -53,15 +90,21 @@ public class Ball : MonoBehaviour
         if (damage <= 0) return;
 
         _currentHealth -= damage;
-        if (_currentHealth < 0)
+        healthText.text = _currentHealth.ToString();
+
+        if (_currentHealth <= 0)
         {
             _currentHealth = 0;
+            Time.timeScale = 0f;
+            PlayerDie();
         }
         SetScale();
     }
     #endregion  
 
+
     private void OnCollisionEnter(Collision collision)
     {
+        SetSpeed(maxSpeed);
     }
 }
