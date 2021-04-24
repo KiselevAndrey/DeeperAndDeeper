@@ -113,9 +113,9 @@ public class Ball : MonoBehaviour
     #endregion
 
     #region Goal
-    void Goal(Vector3 goalPos)
+    void Goal(Vector3 goalPos, int addedScore)
     {
-        _goalsWithoutHit++;
+        _goalsWithoutHit += addedScore;
         AddMoney(_goalsWithoutHit * GoalMultiplier);
     }
     #endregion

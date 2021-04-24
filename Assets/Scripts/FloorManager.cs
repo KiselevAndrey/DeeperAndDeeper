@@ -15,7 +15,7 @@ public class FloorManager : MonoBehaviour
             platform.SetType(PlatformManager.Type.Start);
         }
 
-        RandomPlatform().SetType(PlatformManager.Type.Exit);
+        RandomPlatform().SetType(PlatformManager.Type.Exit, 0); // damade instead of score
     }
 
     public void SetPlatform(int difficult)
@@ -25,8 +25,11 @@ public class FloorManager : MonoBehaviour
             platform.SetType(PlatformManager.Type.Normal);
         }
 
-        if (Random.Range(0, 100) < difficult)
-            RandomPlatform().SetType(PlatformManager.Type.Trap, difficult);
+        for (int i = 0; i < 5; i++)
+        {
+            if (Random.Range(0, Mathf.Pow(10, i)) < difficult)
+                RandomPlatform().SetType(PlatformManager.Type.Trap, difficult);
+        }
 
         int exitCount = (31 - difficult) / 10;
         exitCount = Mathf.Max(1, exitCount);

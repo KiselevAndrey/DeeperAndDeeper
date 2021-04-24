@@ -15,7 +15,8 @@ public class PlatformManager : MonoBehaviour
     int _damage = 0;
 
     public static Action<int> BallHit;
-    public static Action<Vector3> Goal;
+    public static Action<Vector3, int> Goal;
+    public static Action<Vector3> DestroyPlatform;
 
     public void SetType(Type type, int damage = 1)
     {
@@ -24,6 +25,7 @@ public class PlatformManager : MonoBehaviour
             case Type.Exit:
                 GetComponent<MeshRenderer>().enabled = false;
                 GetComponent<MeshCollider>().isTrigger = true;
+                _damage = damage; // damade instead of score
                 break;
             case Type.Trap:
                 GetComponent<Renderer>().material = trapMaterial;
@@ -47,7 +49,8 @@ public class PlatformManager : MonoBehaviour
     {
         if (transform.position.y > Ball.singleton.transform.position.y)
         {
-            Goal(transform.position);
+            Goal(transform.position, _damage); // damade instead of score
+            DestroyPlatform(transform.position);
             myFloor.DestroyMe();
         }
     }

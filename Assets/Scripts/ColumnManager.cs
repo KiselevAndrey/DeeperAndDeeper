@@ -25,12 +25,12 @@ public class ColumnManager : MonoBehaviour
 
     private void Awake()
     {
-        PlatformManager.Goal += NewPosition;
+        PlatformManager.DestroyPlatform += NewPosition;
     }
 
     private void OnDestroy()
     {
-        PlatformManager.Goal += NewPosition;
+        PlatformManager.DestroyPlatform += NewPosition;
     }
     #endregion
 
