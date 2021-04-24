@@ -15,6 +15,7 @@ public class PlatformManager : MonoBehaviour
     int _damage = 0;
 
     public static Action<int> BallHit;
+    public static Action<Vector3> Goal;
 
     public void SetType(Type type, int damage = 1)
     {
@@ -44,8 +45,11 @@ public class PlatformManager : MonoBehaviour
     #region OnTrigger OnCollision
     private void OnTriggerExit(Collider other)
     {
-        if(transform.position.y > Ball.singleton.transform.position.y)
+        if (transform.position.y > Ball.singleton.transform.position.y)
+        {
+            Goal(transform.position);
             myFloor.DestroyMe();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

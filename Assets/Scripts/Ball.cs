@@ -16,7 +16,15 @@ public class Ball : MonoBehaviour
     [SerializeField] float minScale = 0.1f;
     [SerializeField] Text healthText;
 
+    [Header("Money")]
+    [SerializeField] GameObject moneyPrefab;
+    [SerializeField] Transform whereToFly;
+    public float GoalMultiplier = 1;
+    [SerializeField] Text moneyText;
+
     int _currentHealth;
+    int _goalsWithoutHit;
+    float _money;
 
     public static Action PlayerDie;
 
@@ -25,10 +33,12 @@ public class Ball : MonoBehaviour
     {
         singleton = this;
         PlatformManager.BallHit += Hit;
+        PlatformManager.Goal += Goal;
     }
     private void OnDestroy()
     {
         PlatformManager.BallHit -= Hit;
+        PlatformManager.Goal -= Goal;
     }
 
     private void Start()
@@ -36,6 +46,7 @@ public class Ball : MonoBehaviour
         _currentHealth = maxHealth;
         healthText.text = _currentHealth.ToString();
         SetScale();
+        AddMoney(0);
     }
 
     private void FixedUpdate()
@@ -54,7 +65,6 @@ public class Ball : MonoBehaviour
     {
         if (rb.velocity.magnitude > maxSpeed)
         {
-            print("maxspeed " + rb.velocity.magnitude);
             SetSpeed(maxSpeed);
         }
     }
@@ -63,7 +73,6 @@ public class Ball : MonoBehaviour
     {
         if (rb.velocity.magnitude < 0.1f)
         {
-            print("lowspeed " + rb.velocity.magnitude);
             StartCoroutine(StartDown());
         }
     }
@@ -89,6 +98,7 @@ public class Ball : MonoBehaviour
     {
         if (damage <= 0) return;
 
+        _goalsWithoutHit = 0;
         _currentHealth -= damage;
         healthText.text = _currentHealth.ToString();
 
@@ -100,8 +110,36 @@ public class Ball : MonoBehaviour
         }
         SetScale();
     }
-    #endregion  
+    #endregion
 
+    #region Goal
+    void Goal(Vector3 goalPos)
+    {
+        _goalsWithoutHit++;
+        AddMoney(_goalsWithoutHit * GoalMultiplier);
+    }
+    #endregion
+
+    #region Money
+    void AddMoney(float addedMoney)
+    {
+        _money += addedMoney;
+        moneyText.text = MoneyToString();
+    }
+
+    string MoneyToString()
+    {
+        string[] moneyEndings = { "", "K", "M", "B", "T", "q", "Q", "s", "S", "N", "d", "U", "D" };
+        int period = 0;
+        float money = (int)_money;
+        while (money > 1000)
+        {
+            money /= 1000;
+            period++;
+        }
+        return money.ToString() + " " + moneyEndings[period];
+    }
+    #endregion
 
     private void OnCollisionEnter(Collision collision)
     {

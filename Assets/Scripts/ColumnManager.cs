@@ -17,16 +17,28 @@ public class ColumnManager : MonoBehaviour
 
     List<FloorManager> _floors = new List<FloorManager>();
 
-    #region Start
+    #region Start Awake OnDestroy
     private void Start()
     {        
         CreateFloors();
     }
+
+    private void Awake()
+    {
+        PlatformManager.Goal += NewPosition;
+    }
+
+    private void OnDestroy()
+    {
+        PlatformManager.Goal += NewPosition;
+    }
     #endregion
 
     #region NewPosition
-    public void NewPosition()
+    public void NewPosition(Vector3 goalPos)
     {
+        if (goalPos.y > transform.position.y || goalPos != nextManager.GetPosFloor(2)) return;
+
         Vector3 newPos = nextManager.transform.position;
         newPos.y -= nextManager.height;
         transform.position = newPos;
@@ -35,6 +47,14 @@ public class ColumnManager : MonoBehaviour
 
         _floors.Clear();
         CreateFloors();
+    }
+
+    public Vector3 GetPosFloor(int index) 
+    {
+        if (_floors[index])
+            return _floors[index].transform.position;
+        else
+            return transform.position;
     }
     #endregion
 
