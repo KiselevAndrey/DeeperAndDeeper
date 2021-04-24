@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlatformManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class PlatformManager : MonoBehaviour
     [SerializeField] Material startMaterial;
 
     int _damage = 0;
+
+    public static Action<int> BallHit;
 
     public void SetType(Type type, int damage = 1)
     {
@@ -43,6 +46,11 @@ public class PlatformManager : MonoBehaviour
     {
         if(transform.position.y > Ball.singleton.transform.position.y)
             myFloor.DestroyMe();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        BallHit(_damage);
     }
     #endregion
 }
