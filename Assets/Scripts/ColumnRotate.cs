@@ -1,46 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ColumnRotate : MonoBehaviour
 {
-    public float rotationSpeed;
-
-    CurrentPlatform currentPlatform;
-    Swiper swiper;
-
     enum CurrentPlatform { PC, Android }
 
-    private void Start()
+    public float rotationSpeed;
+
+    CurrentPlatform _currentPlatform;
+    Swiper _swiper;
+
+    void Start()
     {
-        currentPlatform = CurrentPlatform.PC;
-        swiper = new Swiper();
+        _currentPlatform = CurrentPlatform.PC;
+        _swiper = new Swiper();
+
+        if (_currentPlatform == CurrentPlatform.PC)
+        {
+            Camera camera = Camera.main;
+            _swiper.startPressPos = new Vector2(camera.pixelWidth / 2, camera.pixelHeight / 2);
+        }
     }
 
-    private void Update()
+    // Update is called once per frame
+    void Update()
     {
         Rotate();
-        if (Input.GetKeyUp(KeyCode.Space)) Time.timeScale *= 1.1f;
     }
 
+    #region Rotate
     void Rotate()
     {
-        switch (currentPlatform)
+        switch (_currentPlatform)
         {
             case CurrentPlatform.PC:
-                if (Input.GetMouseButtonDown(0)) swiper.startPressPos = Input.mousePosition;
-                if (Input.GetMouseButton(0))
-                {
-                    Vector2 mousePos = Input.mousePosition;
-                    swiper.endPressPos = mousePos;
+                Vector2 mousePos = Input.mousePosition;
+                _swiper.endPressPos = mousePos;
 
-                    float swipeRotate = swiper.Swipe(Swiper.DirectionName.Horizontal);
+                float swipeRotate = _swiper.Swipe(Swiper.DirectionName.Horizontal);
 
-                    if (swipeRotate == 0) break;
+                if (swipeRotate == 0) break;
 
-                    Vector3 rotate = Vector3.zero;
-                    rotate.y = transform.rotation.eulerAngles.y + rotationSpeed * -swipeRotate;
+                Vector3 rotate = Vector3.zero;
+                rotate.y = transform.rotation.eulerAngles.y + rotationSpeed * -swipeRotate;
 
-                    transform.rotation = Quaternion.Euler(rotate);
-                }
+                transform.rotation = Quaternion.Euler(rotate);
                 break;
             case CurrentPlatform.Android:
                 break;
@@ -48,4 +53,5 @@ public class ColumnRotate : MonoBehaviour
                 break;
         }
     }
+    #endregion
 }
