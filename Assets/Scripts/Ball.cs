@@ -30,6 +30,7 @@ public class Ball : MonoBehaviour
 
     int _currentHealth;
     int _goalsWithoutHit;
+    bool _shoping;
 
     public static Action PlayerDie;
 
@@ -48,17 +49,18 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
-        Load();
     }
 
     private void FixedUpdate()
     {
+        if (_shoping) return;
+
         CheckMaxSpeed();
         //CheckLowSpeed();
     }
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space)) Time.timeScale = Time.timeScale > 0 ? 0f : 1f;
+        if (Input.GetKeyUp(KeyCode.Space) && !_shoping) Time.timeScale = Time.timeScale > 0 ? 0f : 1f;
     }
     #endregion
 
@@ -148,11 +150,12 @@ public class Ball : MonoBehaviour
     #region Save Load
     public void Save() => SaveSystem.SaveBall(this);
 
-    public void Load(bool update = true)
+    public void Load(bool forShop = false)
     {
         SaveSystem.LoadBall()?.LoadData(ref singleton);
 
-        if (!update) return;
+        _shoping = forShop;
+        if (forShop) return;
 
         _currentHealth = maxHealth;
         healthText.text = _currentHealth.ToString();
@@ -161,8 +164,23 @@ public class Ball : MonoBehaviour
     }
     #endregion
 
+    #region OnCollision
     private void OnCollisionEnter(Collision collision)
     {
         SetSpeed(maxSpeed);
     }
+    #endregion
+
+    #region Shoping
+    public void BuyHealth()
+    {
+        maxHealth++;
+        healthBonusPurchased++;
+    }
+    public void BuyGoldMultiplied()
+    {
+        goalMultiplier++;
+        goldAddedBonusPurchased++;
+    }
+    #endregion
 }

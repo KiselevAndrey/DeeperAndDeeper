@@ -47,7 +47,7 @@ public static class SaveSystem
     public static void SaveColumnRotate(ColumnRotate rotate)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + ballPath;
+        string path = Application.persistentDataPath + columnRotatePath;
         FileStream stream = new FileStream(path, FileMode.Create);
 
         ColumnRotateData data = new ColumnRotateData(rotate);
@@ -58,7 +58,7 @@ public static class SaveSystem
 
     public static ColumnRotateData LoadColumnRotate()
     {
-        string path = Application.persistentDataPath + ballPath;
+        string path = Application.persistentDataPath + columnRotatePath;
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

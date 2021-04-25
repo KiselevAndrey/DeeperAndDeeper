@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -25,18 +24,9 @@ public class GameManager : MonoBehaviour
         gameUI.SetActive(true);
         afterGameUI.SetActive(false);
         Time.timeScale = 1f;
-    }
-    #endregion
 
-    #region Scenes
-    public static void LoadScene(Object scene)
-    {
-        SceneManager.LoadScene(scene.name);
-    }
-
-    public static void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Ball.singleton.Load();
+        ColumnRotate.singleton.Load();
     }
     #endregion
 
@@ -49,7 +39,6 @@ public class GameManager : MonoBehaviour
 
         string score = "Current score: " + Ball.singleton.currentScore;
         score += "\nBest score: " + Ball.singleton.bestScore;
-        scoreText.text = score;
-        
+        scoreText.text = score;        
     }
 }

@@ -204,7 +204,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 46648463}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 267092629}
+        m_TargetAssemblyTypeName: ManagerScenes, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 102900000, guid: 06fc47a7f1ec8c84497cf239524d51a6, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &46648463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,8 +438,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 267092627}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 267092629}
+        m_TargetAssemblyTypeName: ManagerScenes, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -491,6 +503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 267092628}
   - component: {fileID: 267092627}
+  - component: {fileID: 267092629}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -528,6 +541,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &267092629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267092626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d80c6073f651ada439424223ba669efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &412006922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,7 +2002,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1952848363}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 267092629}
+        m_TargetAssemblyTypeName: ManagerScenes, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 102900000, guid: 68b84e9643119ce478bb8e79a0211ac8, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1952848363
 MonoBehaviour:
   m_ObjectHideFlags: 0

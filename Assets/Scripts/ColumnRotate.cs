@@ -11,12 +11,16 @@ public class ColumnRotate : MonoBehaviour
 
     CurrentPlatform _currentPlatform;
     Swiper _swiper;
+    bool _shoping;
 
-    #region Start Update
-    void Start()
+    #region Awake Start Update
+    private void Awake()
     {
         singleton = this;
+    }
 
+    void Start()
+    {
         _currentPlatform = CurrentPlatform.PC;
         _swiper = new Swiper();
 
@@ -25,20 +29,18 @@ public class ColumnRotate : MonoBehaviour
             Camera camera = Camera.main;
             _swiper.startPressPos = new Vector2(camera.pixelWidth / 2, camera.pixelHeight / 2);
         }
-
-        Load();
     }
-    #endregion
 
     void Update()
     {
         Rotate();
     }
+    #endregion
 
     #region Rotate
     void Rotate()
     {
-        if (Time.timeScale == 0f) return;
+        if (Time.timeScale == 0f || _shoping) return;
 
         switch (_currentPlatform)
         {
@@ -66,6 +68,19 @@ public class ColumnRotate : MonoBehaviour
     #region Save Load
     public void Save() => SaveSystem.SaveColumnRotate(this);
 
-    public void Load() => SaveSystem.LoadColumnRotate()?.LoadData(ref singleton);
+    public void Load(bool shoping = false)
+    {
+        SaveSystem.LoadColumnRotate()?.LoadData(ref singleton);
+        
+        _shoping = shoping;
+    }
+    #endregion
+
+    #region Shoping
+    public void BuyRotationSpeed()
+    {
+        rotationSpeed += .001f;
+        speedBonusPurchased++;
+    }
     #endregion
 }
