@@ -9,10 +9,7 @@ public class ShopManager : MonoBehaviour
     [Header("From ball")]
     [SerializeField] Text healthPrice;
     [SerializeField] Text goldMultipliedPrice;
-
-    [Header("From column")]
-    [SerializeField] Text rotationSpeedPrice;
-
+    [SerializeField] Text punchingPrice;
 
     [Header("Additional options")]
     [SerializeField] GameObject noMoney;
@@ -35,16 +32,13 @@ public class ShopManager : MonoBehaviour
     #region UpdateTexts
     void UpdateTexts()
     {
-        UpdateMoneyText();
-        UpdateHealthText();
-        UpdateGoldMultipliedText();
-        UpdateRotationSpeedText();
+        UpdateText(moneyText, Ball.FloatToString(_ball.money));
+        UpdateText(healthPrice, Ball.FloatToString(CalculatePrice(_ball.healthBonusPurchased)));
+        UpdateText(goldMultipliedPrice, Ball.FloatToString(CalculatePrice(_ball.goldAddedBonusPurchased)));
+        UpdateText(punchingPrice, Ball.FloatToString(CalculatePrice(_ball.punchingBonusPurchased)));
     }
 
-    void UpdateMoneyText() => moneyText.text = Ball.FloatToString(_ball.money);
-    void UpdateHealthText() => healthPrice.text = Ball.FloatToString(CalculatePrice(_ball.healthBonusPurchased));
-    void UpdateGoldMultipliedText() => goldMultipliedPrice.text = Ball.FloatToString(CalculatePrice(_ball.goldAddedBonusPurchased));
-    void UpdateRotationSpeedText() => rotationSpeedPrice.text = Ball.FloatToString(CalculatePrice(_columnRotate.speedBonusPurchased));
+    void UpdateText(Text text, string str) => text.text = str;
 
     int CalculatePrice(int bonucPurchased) => (int)Mathf.Pow(2, bonucPurchased + 1);
     #endregion
@@ -62,8 +56,8 @@ public class ShopManager : MonoBehaviour
         _ball.money -= price;
         _ball.BuyHealth();
 
-        UpdateMoneyText();
-        UpdateHealthText();
+        UpdateText(moneyText, Ball.FloatToString(_ball.money));
+        UpdateText(healthPrice, Ball.FloatToString(CalculatePrice(_ball.healthBonusPurchased)));
     }
 
     public void TryBuyGoldMultiplier()
@@ -78,13 +72,13 @@ public class ShopManager : MonoBehaviour
         _ball.money -= price;
         _ball.BuyGoldMultiplied();
 
-        UpdateMoneyText();
-        UpdateGoldMultipliedText();
+        UpdateText(moneyText, Ball.FloatToString(_ball.money));
+        UpdateText(goldMultipliedPrice, Ball.FloatToString(CalculatePrice(_ball.goldAddedBonusPurchased)));
     }
     
-    public void TryBuyRotationSpeed()
+    public void TryBuyPunching()
     {
-        int price = CalculatePrice(_columnRotate.speedBonusPurchased);
+        int price = CalculatePrice(_ball.punchingBonusPurchased);
         if (price > _ball.money)
         {
             StartCoroutine(NoMoney(++_noMoneyCount));
@@ -92,10 +86,10 @@ public class ShopManager : MonoBehaviour
         }
 
         _ball.money -= price;
-        _columnRotate.BuyRotationSpeed();
+        _ball.BuyPunching();
 
-        UpdateMoneyText();
-        UpdateRotationSpeedText();
+        UpdateText(moneyText, Ball.FloatToString(_ball.money));
+        UpdateText(punchingPrice, Ball.FloatToString(CalculatePrice(_ball.punchingBonusPurchased)));
     }
 
     IEnumerator NoMoney(int count)

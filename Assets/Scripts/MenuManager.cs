@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +33,10 @@ public class MenuManager : MonoBehaviour
         _howPlayIndex = index;
         string[] texts = {
         "Target - go deeper",
-        "White platforms do not cause damage"
+        "White platforms do not cause damage",
+        "Green platforms take 1 damage",
+        "Red platforms take more damage",
+        "Thanks for music!\nSpook4 от PeriTune | http://peritune.com Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0 Music promoted by https://www.chosic.com/ "
         };
 
         print(index);

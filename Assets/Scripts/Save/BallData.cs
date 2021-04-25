@@ -7,7 +7,8 @@ public class BallData
     readonly float money;
     readonly float goalMultiplier;
     readonly int goldAddedBonusPurchased;
-    
+    readonly int punchedBonusPurchased;
+
     readonly int bestScore;
 
     public BallData(Ball ball)
@@ -18,6 +19,7 @@ public class BallData
         money = ball.money;
         goalMultiplier = ball.goalMultiplier;
         goldAddedBonusPurchased = ball.goldAddedBonusPurchased;
+        punchedBonusPurchased = ball.punchingBonusPurchased;
 
         bestScore = ball.bestScore;
     }
@@ -30,6 +32,7 @@ public class BallData
         ball.money = money;
         ball.goalMultiplier = goalMultiplier;
         ball.goldAddedBonusPurchased = goldAddedBonusPurchased;
+        ball.punchingBonusPurchased = punchedBonusPurchased;
 
         ball.bestScore = bestScore;
     }

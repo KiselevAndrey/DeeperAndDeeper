@@ -601,7 +601,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1625704328}
         m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
-        m_MethodName: TryBuyRotationSpeed
+        m_MethodName: TryBuyPunching
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -785,7 +785,7 @@ GameObject:
   - component: {fileID: 522552023}
   - component: {fileID: 522552024}
   m_Layer: 5
-  m_Name: Column Rotation speed goods
+  m_Name: Pushing goods
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1463,7 +1463,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Add Rotation Speed
+  m_Text: Add Punching
 --- !u!222 &1106445030
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2046,7 +2046,7 @@ MonoBehaviour:
   moneyText: {fileID: 1703877768}
   healthPrice: {fileID: 1426170204}
   goldMultipliedPrice: {fileID: 26491982}
-  rotationSpeedPrice: {fileID: 1843982237}
+  punchingPrice: {fileID: 1843982237}
   noMoney: {fileID: 1562743251}
 --- !u!114 &1625704329
 MonoBehaviour:

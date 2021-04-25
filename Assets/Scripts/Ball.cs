@@ -8,6 +8,7 @@ public class Ball : MonoBehaviour
     static public Ball singleton;
 
     [SerializeField] Rigidbody rb;
+    [SerializeField] SphereCollider sphereCollider;
     [SerializeField] float maxSpeed;
 
     [Header("Health")]
@@ -25,12 +26,14 @@ public class Ball : MonoBehaviour
     [HideInInspector] public float money;
     [HideInInspector] public int healthBonusPurchased;
     [HideInInspector] public int goldAddedBonusPurchased;
+    [HideInInspector] public int punchingBonusPurchased;
     [HideInInspector] public float currentScore;
     [HideInInspector] public int bestScore;
 
     int _currentHealth;
     int _goalsWithoutHit;
     bool _notPlaying;
+    int _punchingCount;
 
     public static Action PlayerDie;
 
@@ -47,16 +50,13 @@ public class Ball : MonoBehaviour
         PlatformManager.Goal -= Goal;
     }
 
-    private void Start()
-    {
-    }
-
     private void FixedUpdate()
     {
         if (_notPlaying) return;
 
+        //rb.velocity = Vector3.down * maxSpeed;
         CheckMaxSpeed();
-        CheckLowSpeed();
+        //CheckLowSpeed();
     }
     private void Update()
     {
@@ -84,8 +84,10 @@ public class Ball : MonoBehaviour
     IEnumerator StartDown()
     {
         yield return new WaitForSeconds(Time.deltaTime);
+        
         if (rb.velocity.magnitude < 0.1f)
             SetSpeed(-maxSpeed);
+        print("minspeed");
     }
 
     void SetSpeed(float speed) => rb.velocity = rb.velocity.normalized * speed;
@@ -161,6 +163,7 @@ public class Ball : MonoBehaviour
         healthText.text = _currentHealth.ToString();
         SetScale();
         AddMoney(0);
+        if (punchingBonusPurchased > 0) sphereCollider.isTrigger = true;
     }
 
     public void ResetMe(bool delBestScore)
@@ -176,10 +179,19 @@ public class Ball : MonoBehaviour
     }
     #endregion
 
-    #region OnCollision
+    #region OnCollision OnTrigger
     private void OnCollisionEnter(Collision collision)
     {
         SetSpeed(maxSpeed);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!sphereCollider.isTrigger) return;
+        
+        _punchingCount++;
+        if (punchingBonusPurchased <= _punchingCount)
+            sphereCollider.isTrigger = false;
     }
     #endregion
 
@@ -193,6 +205,11 @@ public class Ball : MonoBehaviour
     {
         goalMultiplier++;
         goldAddedBonusPurchased++;
+    }
+
+    public void BuyPunching()
+    {
+        punchingBonusPurchased++;
     }
     #endregion
 }
