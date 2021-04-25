@@ -82,6 +82,4 @@ public class ColumnManager : MonoBehaviour
             _floors[i].SetPlatform(difficult);
     }
     #endregion
-
-
 }

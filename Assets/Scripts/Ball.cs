@@ -148,9 +148,11 @@ public class Ball : MonoBehaviour
     #region Save Load
     public void Save() => SaveSystem.SaveBall(this);
 
-    public void Load()
+    public void Load(bool update = true)
     {
-        //SaveSystem.LoadBall()?.LoadData(ref singleton);
+        SaveSystem.LoadBall()?.LoadData(ref singleton);
+
+        if (!update) return;
 
         _currentHealth = maxHealth;
         healthText.text = _currentHealth.ToString();
