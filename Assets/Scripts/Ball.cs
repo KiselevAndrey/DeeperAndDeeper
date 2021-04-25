@@ -56,7 +56,7 @@ public class Ball : MonoBehaviour
         if (_notPlaying) return;
 
         CheckMaxSpeed();
-        //CheckLowSpeed();
+        CheckLowSpeed();
     }
     private void Update()
     {

@@ -13,6 +13,7 @@ public class PlatformManager : MonoBehaviour
     [SerializeField] Material startMaterial;
 
     int _damage = 0;
+    Type _currentType;
 
     public static Action<int> BallHit;
     public static Action<Vector3, int> Goal;
@@ -20,6 +21,8 @@ public class PlatformManager : MonoBehaviour
 
     public void SetType(Type type, int damage = 1)
     {
+        _currentType = type;
+
         switch (type)
         {
             case Type.Exit:
@@ -57,10 +60,10 @@ public class PlatformManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(Ball.singleton.transform.position.y > transform.position.y)
+        if(Ball.singleton.transform.position.y > transform.position.y && _currentType != Type.Start)
         {
             BallHit(_damage);
-            SetType(Type.Start);
+            SetType(Type.Exit);
         }
     }
     #endregion
