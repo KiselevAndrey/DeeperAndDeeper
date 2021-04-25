@@ -11,7 +11,7 @@ public class Ball : MonoBehaviour
     [SerializeField] float maxSpeed;
 
     [Header("Health")]
-    [SerializeField] int maxHealth;
+    public int maxHealth;
     [SerializeField] float startScale = 0.3f;
     [SerializeField] float minScale = 0.1f;
     [SerializeField] Text healthText;
@@ -19,12 +19,17 @@ public class Ball : MonoBehaviour
     [Header("Money")]
     [SerializeField] GameObject moneyPrefab;
     [SerializeField] Transform whereToFly;
-    public float GoalMultiplier = 1;
+    public float goalMultiplier = 1;
     [SerializeField] Text moneyText;
+
+    [HideInInspector] public float money;
+    [HideInInspector] public int healthBonusPurchased;
+    [HideInInspector] public int goldAddedBonusPurchased;
+    [HideInInspector] public float currentScore;
+    [HideInInspector] public int bestScore;
 
     int _currentHealth;
     int _goalsWithoutHit;
-    float _money;
 
     public static Action PlayerDie;
 
@@ -43,10 +48,7 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
-        _currentHealth = maxHealth;
-        healthText.text = _currentHealth.ToString();
-        SetScale();
-        AddMoney(0);
+        Load();
     }
 
     private void FixedUpdate()
@@ -106,6 +108,7 @@ public class Ball : MonoBehaviour
         {
             _currentHealth = 0;
             Time.timeScale = 0f;
+            bestScore = Mathf.Max(bestScore, (int)currentScore);
             PlayerDie();
         }
         SetScale();
@@ -116,28 +119,43 @@ public class Ball : MonoBehaviour
     void Goal(Vector3 goalPos, int addedScore)
     {
         _goalsWithoutHit += addedScore;
-        AddMoney(_goalsWithoutHit * GoalMultiplier);
+        AddMoney(_goalsWithoutHit * goalMultiplier);
     }
     #endregion
 
     #region Money
     void AddMoney(float addedMoney)
     {
-        _money += addedMoney;
-        moneyText.text = MoneyToString();
+        money += addedMoney;
+        currentScore += addedMoney;
+        moneyText.text = FloatToString(money);
     }
 
-    string MoneyToString()
+    public static string FloatToString(float score)
     {
-        string[] moneyEndings = { "", "K", "M", "B", "T", "q", "Q", "s", "S", "N", "d", "U", "D" };
+        string[] endings = { "", "K", "M", "B", "T", "q", "Q", "s", "S", "N", "d", "U", "D" };
         int period = 0;
-        float money = (int)_money;
-        while (money > 1000)
+        float num = (int)score;
+        while (num > 1000)
         {
-            money /= 1000;
+            num /= 1000;
             period++;
         }
-        return money.ToString() + " " + moneyEndings[period];
+        return num.ToString() + " " + endings[period];
+    }
+    #endregion
+
+    #region Save Load
+    public void Save() => SaveSystem.SaveBall(this);
+
+    public void Load()
+    {
+        //SaveSystem.LoadBall()?.LoadData(ref singleton);
+
+        _currentHealth = maxHealth;
+        healthText.text = _currentHealth.ToString();
+        SetScale();
+        AddMoney(0);
     }
     #endregion
 

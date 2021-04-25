@@ -30,7 +30,7 @@ public class ColumnManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlatformManager.DestroyPlatform += NewPosition;
+        PlatformManager.DestroyPlatform -= NewPosition;
     }
     #endregion
 

@@ -1,18 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("UI")]
+    [SerializeField] GameObject gameUI;
+    [SerializeField] GameObject afterGameUI;
+    [SerializeField] Text scoreText;
+
+    #region Awake OnDestroy Start
+    private void Awake()
     {
-        
+        Ball.PlayerDie += PlayerDie;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
+        Ball.PlayerDie -= PlayerDie;
+    }
+
+    private void Start()
+    {
+        gameUI.SetActive(true);
+        afterGameUI.SetActive(false);
+        Time.timeScale = 1f;
+    }
+    #endregion
+
+    #region Scenes
+    public static void LoadScene(Object scene)
+    {
+        SceneManager.LoadScene(scene.name);
+    }
+
+    public static void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    #endregion
+
+    void PlayerDie()
+    {
+        Ball.singleton.Save();
+
+        gameUI.SetActive(false);
+        afterGameUI.SetActive(true);
+
+        string score = "Current score: " + Ball.singleton.currentScore;
+        score += "\nBest score: " + Ball.singleton.bestScore;
+        scoreText.text = score;
         
     }
 }

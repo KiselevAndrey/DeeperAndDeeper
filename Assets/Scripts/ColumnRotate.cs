@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ColumnRotate : MonoBehaviour
 {
     enum CurrentPlatform { PC, Android }
 
+    public static ColumnRotate singleton;
+
     public float rotationSpeed;
+    [HideInInspector] public int speedBonusPurchased;
 
     CurrentPlatform _currentPlatform;
     Swiper _swiper;
 
+    #region Start Update
     void Start()
     {
+        singleton = this;
+
         _currentPlatform = CurrentPlatform.PC;
         _swiper = new Swiper();
 
@@ -21,9 +25,11 @@ public class ColumnRotate : MonoBehaviour
             Camera camera = Camera.main;
             _swiper.startPressPos = new Vector2(camera.pixelWidth / 2, camera.pixelHeight / 2);
         }
-    }
 
-    // Update is called once per frame
+        Load();
+    }
+    #endregion
+
     void Update()
     {
         Rotate();
@@ -55,5 +61,11 @@ public class ColumnRotate : MonoBehaviour
                 break;
         }
     }
+    #endregion
+
+    #region Save Load
+    public void Save() => SaveSystem.SaveColumnRotate(this);
+
+    public void Load() => SaveSystem.LoadColumnRotate()?.LoadData(ref singleton);
     #endregion
 }
