@@ -11,7 +11,7 @@ public class ColumnRotate : MonoBehaviour
 
     CurrentPlatform _currentPlatform;
     Swiper _swiper;
-    bool _shoping;
+    bool _notPlaying;
 
     #region Awake Start Update
     private void Awake()
@@ -40,7 +40,7 @@ public class ColumnRotate : MonoBehaviour
     #region Rotate
     void Rotate()
     {
-        if (Time.timeScale == 0f || _shoping) return;
+        if (Time.timeScale == 0f || _notPlaying) return;
 
         switch (_currentPlatform)
         {
@@ -68,11 +68,11 @@ public class ColumnRotate : MonoBehaviour
     #region Save Load
     public void Save() => SaveSystem.SaveColumnRotate(this);
 
-    public void Load(bool shoping = false)
+    public void Load(bool notPlaying = false)
     {
         SaveSystem.LoadColumnRotate()?.LoadData(ref singleton);
         
-        _shoping = shoping;
+        _notPlaying = notPlaying;
     }
     #endregion
 
