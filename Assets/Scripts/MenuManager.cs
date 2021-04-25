@@ -35,8 +35,9 @@ public class MenuManager : MonoBehaviour
         "Target - go deeper",
         "White platforms do not cause damage",
         "Green platforms take 1 damage",
-        "Red platforms take more damage",
-        "Thanks for music!\nSpook4 от PeriTune | http://peritune.com Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0 Music promoted by https://www.chosic.com/ "
+        "Red platforms take more than 1 damage depending on the level",
+        "Platform is navigated with the mouse, moving it from the middle of the screen"
+        //"Thanks for music!\nSpook4 от PeriTune | http://peritune.com Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0 Music promoted by https://www.chosic.com/ "
         };
 
         print(index);

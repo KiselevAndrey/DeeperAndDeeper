@@ -173,7 +173,8 @@ public class Ball : MonoBehaviour
         money = 0;
         healthBonusPurchased = 0;
         goldAddedBonusPurchased = 0;
-        if(delBestScore) bestScore = 0;
+        punchingBonusPurchased = 0;
+        if (delBestScore) bestScore = 0;
 
         Save();
     }
