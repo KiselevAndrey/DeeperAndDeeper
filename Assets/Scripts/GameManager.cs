@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         Ball.singleton.Load();
-        ColumnRotate.singleton.Load();
+        //ColumnRotate.singleton.Load();
     }
     #endregion
 
