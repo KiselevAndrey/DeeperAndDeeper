@@ -7,6 +7,8 @@ public class ColumnRotate : MonoBehaviour
     public static ColumnRotate singleton;
 
     public float rotationSpeed;
+    [SerializeField] RectTransform arrow;
+
     [HideInInspector] public int speedBonusPurchased;
 
     CurrentPlatform _currentPlatform;
@@ -49,6 +51,11 @@ public class ColumnRotate : MonoBehaviour
                 _swiper.endPressPos = mousePos;
 
                 float swipeRotate = _swiper.Swipe(Swiper.DirectionName.Horizontal);
+
+                Vector3 arrowScale = Vector3.one;
+                arrowScale.x = swipeRotate / 100;
+
+                arrow.localScale = arrowScale;
 
                 if (swipeRotate == 0) break;
 

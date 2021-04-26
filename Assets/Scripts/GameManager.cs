@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
 
         Ball.singleton.Load();
         //ColumnRotate.singleton.Load();
+
+        Cursor.visible = false;
     }
     #endregion
 
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour
 
         string score = "Current score: " + Ball.singleton.currentScore;
         score += "\nBest score: " + Ball.singleton.bestScore;
-        scoreText.text = score;        
+        scoreText.text = score;
+        Cursor.visible = true;
     }
 }
