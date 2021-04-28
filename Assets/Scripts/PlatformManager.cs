@@ -63,7 +63,7 @@ public class PlatformManager : MonoBehaviour
         if(Ball.singleton.transform.position.y > transform.position.y && _currentType != Type.Start)
         {
             BallHit(_damage);
-            SetType(Type.Exit);
+            SetType(Type.Start);
         }
     }
     #endregion
