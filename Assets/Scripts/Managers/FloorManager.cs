@@ -5,8 +5,6 @@ public class FloorManager : MonoBehaviour
 {
     [SerializeField] List<PlatformManager> platforms;
 
-
-
     #region Set Platforms
     public void SetStartPlatform()
     {
@@ -47,4 +45,17 @@ public class FloorManager : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    #region Player
+    /// <summary>
+    /// Check over which platform the player is located
+    /// </summary>
+    public void CheckPlayersPlatform()
+    {
+        for (int i = 0; i < platforms.Count; i++)
+        {
+            if (platforms[i].CheckPlayerFromAbove()) return;
+        }
+    }
+    #endregion
 }

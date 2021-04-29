@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ColumnRotate : MonoBehaviour
 {
-    enum CurrentPlatform { PC, Android }
+    private enum CurrentPlatform { PC, Android }
 
     public static ColumnRotate singleton;
 
@@ -11,9 +11,10 @@ public class ColumnRotate : MonoBehaviour
 
     [HideInInspector] public int speedBonusPurchased;
 
-    CurrentPlatform _currentPlatform;
-    Swiper _swiper;
-    bool _notPlaying;
+    private CurrentPlatform _currentPlatform;
+    private Swiper _swiper;
+    private bool _notPlaying;
+    
 
     #region Awake Start Update
     private void Awake()

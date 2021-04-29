@@ -12,6 +12,10 @@ public class PlatformManager : MonoBehaviour
     [SerializeField] Material normalMaterial;
     [SerializeField] Material startMaterial;
 
+    [Header("From Player cheking")]
+    [SerializeField] private Transform center;
+    [SerializeField] private float detectionRadius;
+
     int _damage = 0;
     Type _currentType;
 
@@ -27,7 +31,6 @@ public class PlatformManager : MonoBehaviour
         {
             case Type.Exit:
                 GetComponent<MeshRenderer>().enabled = false;
-                GetComponent<MeshCollider>().isTrigger = true;
                 _damage = damage; // damade instead of score
                 break;
             case Type.Trap:
@@ -47,23 +50,40 @@ public class PlatformManager : MonoBehaviour
         }
     }
 
-    #region OnTrigger OnCollision
-    private void OnTriggerExit(Collider other)
+    #region Player
+    public bool CheckPlayerFromAbove()
     {
-        if (transform.position.y > Ball.singleton.transform.position.y)
+        float distanceToPlayer = Vector3.Distance(PlayerManager.singleton.transform.position, center.position);
+        if (distanceToPlayer <= detectionRadius)
         {
-            Goal(transform.position, _damage); // damade instead of score
-            DestroyPlatform(transform.position);
-            myFloor.DestroyMe();
+            HittingTreatment();
+            return true;
         }
+
+        return false;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void HittingTreatment()
     {
-        if(Ball.singleton.transform.position.y > transform.position.y && _currentType != Type.Start)
+        switch (_currentType)
         {
-            BallHit(_damage);
-            SetType(Type.Start);
+            case Type.Exit:
+                Goal(transform.position, _damage); // damade instead of score
+                DestroyPlatform(transform.position);
+                myFloor.DestroyMe();
+                break;
+
+            case Type.Trap:
+            case Type.Normal:
+                BallHit(_damage);
+                SetType(Type.Start);
+                break;
+
+            case Type.Start:
+                break;
+
+            default:
+                break;
         }
     }
     #endregion

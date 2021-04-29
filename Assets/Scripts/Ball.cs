@@ -37,7 +37,7 @@ public class Ball : MonoBehaviour
 
     public static Action PlayerDie;
 
-    #region Awake OnDestroy Start Update
+    #region Awake OnDestroy Update
     void Awake()
     {
         singleton = this;

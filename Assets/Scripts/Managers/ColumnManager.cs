@@ -3,19 +3,21 @@ using UnityEngine;
 
 public class ColumnManager : MonoBehaviour
 {
+    [SerializeField] PlayerManager player;
     public int difficult;
 
     [Header("Перереспавн")]
-    [SerializeField] ColumnManager nextManager;
+    [SerializeField] private ColumnManager nextManager;
     public float height;
 
     [Header("Расстановка этажей")]
-    [SerializeField] GameObject floorPrefab;
-    [SerializeField] float startingPosY;
-    [SerializeField] float minPosY;
-    [SerializeField, Tooltip("X - min, Y - max")] Vector2 floorsDistance;
+    [SerializeField] private GameObject floorPrefab;
+    [SerializeField] private float startingPosY;
+    [SerializeField] private float minPosY;
+    [SerializeField, Tooltip("X - min, Y - max")] private Vector2 floorsDistance;
 
-    List<FloorManager> _floors = new List<FloorManager>();
+    private List<FloorManager> _floors = new List<FloorManager>();
+    private int _currentFloorIndex;
 
     #region Start Awake OnDestroy
     private void Start()
@@ -26,16 +28,18 @@ public class ColumnManager : MonoBehaviour
     private void Awake()
     {
         PlatformManager.DestroyPlatform += NewPosition;
+        PlayerManager.CheckState += CheckPlayerPos;
     }
 
     private void OnDestroy()
     {
         PlatformManager.DestroyPlatform -= NewPosition;
+        PlayerManager.CheckState -= CheckPlayerPos;
     }
     #endregion
 
     #region NewPosition
-    public void NewPosition(Vector3 goalPos)
+    private void NewPosition(Vector3 goalPos)
     {
         if (goalPos.y > transform.position.y || goalPos != nextManager.GetPosFloor(2)) return;
 
@@ -49,7 +53,7 @@ public class ColumnManager : MonoBehaviour
         CreateFloors();
     }
 
-    public Vector3 GetPosFloor(int index) 
+    private Vector3 GetPosFloor(int index) 
     {
         if (_floors[index])
             return _floors[index].transform.position;
@@ -59,7 +63,7 @@ public class ColumnManager : MonoBehaviour
     #endregion
 
     #region CreateFloor
-    void CreateFloors()
+    private void CreateFloors()
     {
         float yPos = startingPosY;
         
@@ -80,6 +84,19 @@ public class ColumnManager : MonoBehaviour
         _floors[0].SetStartPlatform();
         for (int i = 1; i < _floors.Count; i++)
             _floors[i].SetPlatform(difficult);
+    }
+    #endregion
+
+    #region Player
+    /// <summary> Check over which platform the player is located </summary>
+    private void CheckPlayerPos()
+    {
+        _floors[_currentFloorIndex].CheckPlayersPlatform();
+    }
+
+    private void GoToNextFloor()
+    {
+
     }
     #endregion
 }
