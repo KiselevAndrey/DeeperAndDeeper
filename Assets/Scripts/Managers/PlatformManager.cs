@@ -19,9 +19,9 @@ public class PlatformManager : MonoBehaviour
     int _damage = 0;
     Type _currentType;
 
-    public static Action<int> BallHit;
-    public static Action<Vector3, int> Goal;
-    public static Action<Vector3> DestroyPlatform;
+    public static Action<int> BallHit;              // from Player
+    public static Action<Vector3, int> Goal;        // from Player
+    public static Action<Vector3> DestroyPlatform;  // from Columnanager
 
     public void SetType(Type type, int damage = 1)
     {
@@ -69,8 +69,8 @@ public class PlatformManager : MonoBehaviour
         {
             case Type.Exit:
                 Goal(transform.position, _damage); // damade instead of score
-                DestroyPlatform(transform.position);
-                myFloor.DestroyMe();
+                DestroyPlatform(myFloor.transform.position);
+                //myFloor.DestroyMe();
                 break;
 
             case Type.Trap:

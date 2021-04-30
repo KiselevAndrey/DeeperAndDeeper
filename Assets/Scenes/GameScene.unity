@@ -4002,72 +4002,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1388110863}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &1400214123
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1700718968}
-    m_Modifications:
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2188367118785028276, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_Name
-      value: platform
-      objectReference: {fileID: 0}
-    - target: {fileID: 3613555775522191202, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c55590473d787374c9fa0821e0125b86, type: 3}
---- !u!4 &1400214124 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1519248956002138638, guid: c55590473d787374c9fa0821e0125b86, type: 3}
-  m_PrefabInstance: {fileID: 1400214123}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1470648523
 GameObject:
   m_ObjectHideFlags: 0
@@ -4842,9 +4776,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 1700707566}
-  maxHealth: 0
+  maxHealth: 3
+  startScale: 0.3
+  minScale: 0.1
+  healthText: {fileID: 1521193230}
   goalMultiplier: 1
-  moneyText: {fileID: 0}
+  moneyText: {fileID: 790119829}
   money: 0
   healthBonusPurchased: 0
   goldAddedBonusPurchased: 0
@@ -4880,7 +4817,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 543450652070552771}
-  - {fileID: 1400214124}
   m_Father: {fileID: 680541559}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

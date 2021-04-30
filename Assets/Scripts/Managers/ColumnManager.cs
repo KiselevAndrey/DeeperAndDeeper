@@ -27,22 +27,37 @@ public class ColumnManager : MonoBehaviour
 
     private void Awake()
     {
-        PlatformManager.DestroyPlatform += NewPosition;
+        PlatformManager.DestroyPlatform += DestroyPlatform;
         PlayerManager.CheckState += CheckPlayerPos;
     }
 
     private void OnDestroy()
     {
-        PlatformManager.DestroyPlatform -= NewPosition;
+        PlatformManager.DestroyPlatform -= DestroyPlatform;
         PlayerManager.CheckState -= CheckPlayerPos;
     }
     #endregion
 
-    #region NewPosition
-    private void NewPosition(Vector3 goalPos)
+    #region Starts from event
+    private void DestroyPlatform(Vector3 goalPlatformPos)
     {
-        if (goalPos.y > transform.position.y || goalPos != nextManager.GetPosFloor(2)) return;
+        if (goalPlatformPos == nextManager.GetPosFloor(2)) NewPosition();
 
+        if (goalPlatformPos.y != _floors[_currentFloorIndex].transform.position.y) return;
+
+
+    }
+
+    /// <summary> Check over which platform the player is located </summary>
+    private void CheckPlayerPos()
+    {
+        _floors[_currentFloorIndex].CheckPlayersPlatform();
+    }
+    #endregion
+
+    #region NewPosition
+    private void NewPosition()
+    {
         Vector3 newPos = nextManager.transform.position;
         newPos.y -= nextManager.height;
         transform.position = newPos;
@@ -53,7 +68,7 @@ public class ColumnManager : MonoBehaviour
         CreateFloors();
     }
 
-    private Vector3 GetPosFloor(int index) 
+    private Vector3 GetPosFloor(int index)
     {
         if (_floors[index])
             return _floors[index].transform.position;
@@ -84,16 +99,12 @@ public class ColumnManager : MonoBehaviour
         _floors[0].SetStartPlatform();
         for (int i = 1; i < _floors.Count; i++)
             _floors[i].SetPlatform(difficult);
+
+        _currentFloorIndex = 0;
     }
     #endregion
 
     #region Player
-    /// <summary> Check over which platform the player is located </summary>
-    private void CheckPlayerPos()
-    {
-        _floors[_currentFloorIndex].CheckPlayersPlatform();
-    }
-
     private void GoToNextFloor()
     {
 

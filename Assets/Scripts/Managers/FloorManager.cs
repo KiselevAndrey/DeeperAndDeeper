@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FloorManager : MonoBehaviour
 {
-    [SerializeField] List<PlatformManager> platforms;
+    [SerializeField] private List<PlatformManager> platforms;
 
     #region Set Platforms
     public void SetStartPlatform()
@@ -38,7 +38,7 @@ public class FloorManager : MonoBehaviour
         }
     }
 
-    PlatformManager RandomPlatform() => platforms[Random.Range(0, platforms.Count)];
+    private PlatformManager RandomPlatform() => platforms[Random.Range(0, platforms.Count)];
     #endregion
 
     public void DestroyMe()

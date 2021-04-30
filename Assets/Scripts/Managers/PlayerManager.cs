@@ -17,10 +17,13 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Health")]
     public int maxHealth;
+    [SerializeField] private float startScale = 0.3f;
+    [SerializeField] private float minScale = 0.1f;
+    [SerializeField] private Text healthText;
 
     [Header("Money")]
     public float goalMultiplier = 1;
-    [SerializeField] Text moneyText;
+    [SerializeField] private Text moneyText;
 
     [HideInInspector] public float money;
     [HideInInspector] public int healthBonusPurchased;
@@ -29,13 +32,13 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public float currentScore;
     [HideInInspector] public int bestScore;
 
-    int _currentHealth;
-    int _goalsWithoutHit;
-    bool _notPlaying;
-    int _punchingCount;
+    private int _currentHealth;
+    private int _goalsWithoutHit;
+    private bool _notPlaying;
+    private int _punchingCount;
 
     #region Awake OnDestroy
-    void Awake()
+    private void Awake()
     {
         singleton = this;
         PlatformManager.BallHit += Hit;
@@ -53,15 +56,20 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Starts from event
-    void Goal(Vector3 goalPos, int addedScore)
+    private void Goal(Vector3 goalPos, int addedScore)
     {
         _goalsWithoutHit += addedScore;
         AddMoney(_goalsWithoutHit * goalMultiplier);
     }
+
+    private void Hit(int damage)
+    {
+
+    }
     #endregion
 
     #region Money
-    void AddMoney(float addedMoney)
+    private void AddMoney(float addedMoney)
     {
         money += addedMoney;
         currentScore += addedMoney;
