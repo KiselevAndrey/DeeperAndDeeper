@@ -31,11 +31,12 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public int punchingBonusPurchased;
     [HideInInspector] public float currentScore;
     [HideInInspector] public int bestScore;
-
+   
     private int _currentHealth;
     private int _goalsWithoutHit;
     private bool _notPlaying;
     private int _punchingCount;
+    private States _currentState;
 
     #region Awake OnDestroy
     private void Awake()
@@ -87,6 +88,28 @@ public class PlayerManager : MonoBehaviour
             period++;
         }
         return num.ToString() + " " + endings[period];
+    }
+    #endregion
+
+    #region State
+    public void ChangeState(States newState)
+    {
+        if (_currentState == newState) return;
+
+        _currentState = newState;
+        switch (_currentState)
+        {
+            case States.Fall:
+                _animator.SetTrigger("Fall");
+                break;
+
+            case States.Jump:
+                _animator.SetTrigger("Jump");
+                break;
+
+            default:
+                break;
+        }
     }
     #endregion
 }

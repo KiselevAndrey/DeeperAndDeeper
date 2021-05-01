@@ -3383,7 +3383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64e959b83db1e0478c3fa386673d575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   difficult: 1
   nextManager: {fileID: 1700718969}
   height: 40
@@ -3391,6 +3390,7 @@ MonoBehaviour:
   startingPosY: 0
   minPosY: -39
   floorsDistance: {x: 0.5, y: 3}
+  moveUpSpeed: 7
 --- !u!4 &1066890232
 Transform:
   m_ObjectHideFlags: 0
@@ -3399,7 +3399,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1066890230}
   m_LocalRotation: {x: 0, y: 0.043619405, z: 0, w: 0.9990483}
-  m_LocalPosition: {x: 0, y: 40, z: 0}
+  m_LocalPosition: {x: 0, y: -40, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 229344080}
@@ -4832,7 +4832,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64e959b83db1e0478c3fa386673d575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   difficult: 0
   nextManager: {fileID: 1066890231}
   height: 40
@@ -4840,6 +4839,7 @@ MonoBehaviour:
   startingPosY: 0
   minPosY: -39
   floorsDistance: {x: 0.5, y: 3}
+  moveUpSpeed: 7
 --- !u!1 &1719664889
 GameObject:
   m_ObjectHideFlags: 0

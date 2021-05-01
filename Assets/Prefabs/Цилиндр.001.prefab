@@ -47,13 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myFloor: {fileID: 0}
-  _animator: {fileID: 0}
-  _deathAnimations: []
   _trapMaterial: {fileID: 2100000, guid: b8d6aaa08db33a54cb89e19d26aa18f3, type: 2}
   _normalMaterial: {fileID: 2100000, guid: 8dfd0f3e0f41677458302b4200aaaaf1, type: 2}
   _startMaterial: {fileID: 2100000, guid: adfae13ba8c84464386a411a6c99a8a6, type: 2}
   _center: {fileID: 6684358541585169034}
-  _detectionRadius: 0.3
+  _detectionRadius: 0.4
 --- !u!33 &3353484580341646316
 MeshFilter:
   m_ObjectHideFlags: 0
