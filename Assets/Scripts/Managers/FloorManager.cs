@@ -4,6 +4,8 @@ using UnityEngine;
 public class FloorManager : MonoBehaviour
 {
     [SerializeField] private List<PlatformManager> platforms;
+    [SerializeField] private Animator animator;
+    [SerializeField] private List<AnimationClip> deathAnimations;
 
     #region Set Platforms
     public void SetStartPlatform()
@@ -41,9 +43,12 @@ public class FloorManager : MonoBehaviour
     private PlatformManager RandomPlatform() => platforms[Random.Range(0, platforms.Count)];
     #endregion
 
-    public void DestroyMe()
+    public void StartDestroyMe()
     {
-        Destroy(gameObject);
+        animator.SetFloat("DieFloat", Random.Range(0, deathAnimations.Count) * 0.1f);
+        animator.SetTrigger("Die");
+
+        Destroy(gameObject, 2f);
     }
 
     #region Player

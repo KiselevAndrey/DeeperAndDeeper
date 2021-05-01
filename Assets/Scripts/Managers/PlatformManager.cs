@@ -5,24 +5,26 @@ public class PlatformManager : MonoBehaviour
 {
     public enum Type { Exit, Trap, Normal, Start }
 
-    [SerializeField] FloorManager myFloor;
+    [Header("Main component")]
+    [SerializeField] private FloorManager _myFloor;
 
     [Header("Materials")]
-    [SerializeField] Material trapMaterial;
-    [SerializeField] Material normalMaterial;
-    [SerializeField] Material startMaterial;
+    [SerializeField] private Material _trapMaterial;
+    [SerializeField] private Material _normalMaterial;
+    [SerializeField] private Material _startMaterial;
 
     [Header("From Player cheking")]
-    [SerializeField] private Transform center;
-    [SerializeField] private float detectionRadius;
+    [SerializeField] private Transform _center;
+    [SerializeField] private float _detectionRadius;
 
-    int _damage = 0;
-    Type _currentType;
+    private int _damage = 0;
+    private Type _currentType;
 
     public static Action<int> BallHit;              // from Player
     public static Action<Vector3, int> Goal;        // from Player
     public static Action<Vector3> DestroyPlatform;  // from Columnanager
 
+    #region From FloorManager
     public void SetType(Type type, int damage = 1)
     {
         _currentType = type;
@@ -34,27 +36,28 @@ public class PlatformManager : MonoBehaviour
                 _damage = damage; // damade instead of score
                 break;
             case Type.Trap:
-                GetComponent<Renderer>().material = trapMaterial;
+                GetComponent<Renderer>().material = _trapMaterial;
                 _damage = damage;
                 break;
             case Type.Normal:
-                GetComponent<Renderer>().material = normalMaterial;
+                GetComponent<Renderer>().material = _normalMaterial;
                 _damage = damage;
                 break;
             case Type.Start:
-                GetComponent<Renderer>().material = startMaterial;
+                GetComponent<Renderer>().material = _startMaterial;
                 _damage = 0;
                 break;
             default:
                 break;
         }
     }
+    #endregion
 
     #region Player
     public bool CheckPlayerFromAbove()
     {
-        float distanceToPlayer = Vector3.Distance(PlayerManager.singleton.transform.position, center.position);
-        if (distanceToPlayer <= detectionRadius)
+        float distanceToPlayer = Vector3.Distance(PlayerManager.singleton.transform.position, _center.position);
+        if (distanceToPlayer <= _detectionRadius)
         {
             HittingTreatment();
             return true;
@@ -69,7 +72,7 @@ public class PlatformManager : MonoBehaviour
         {
             case Type.Exit:
                 Goal(transform.position, _damage); // damade instead of score
-                DestroyPlatform(myFloor.transform.position);
+                DestroyPlatform(_myFloor.transform.position);
                 //myFloor.DestroyMe();
                 break;
 

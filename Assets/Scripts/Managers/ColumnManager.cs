@@ -45,7 +45,10 @@ public class ColumnManager : MonoBehaviour
 
         if (goalPlatformPos.y != _floors[_currentFloorIndex].transform.position.y) return;
 
+        _floors[_currentFloorIndex].StartDestroyMe();
+        _currentFloorIndex++;
 
+        UpColumnToNextFloor();
     }
 
     /// <summary> Check over which platform the player is located </summary>
@@ -105,7 +108,7 @@ public class ColumnManager : MonoBehaviour
     #endregion
 
     #region Player
-    private void GoToNextFloor()
+    private void UpColumnToNextFloor()
     {
 
     }

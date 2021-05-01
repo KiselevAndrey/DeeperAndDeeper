@@ -11,12 +11,12 @@ public class GameManager : MonoBehaviour
     #region Awake OnDestroy Start
     private void Awake()
     {
-        Ball.PlayerDie += PlayerDie;
+        Ball.PlayerDie += PlayerDie;/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     private void OnDestroy()
     {
-        Ball.PlayerDie -= PlayerDie;
+        Ball.PlayerDie -= PlayerDie;/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     private void Start()
@@ -25,8 +25,7 @@ public class GameManager : MonoBehaviour
         afterGameUI.SetActive(false);
         Time.timeScale = 1f;
 
-        Ball.singleton.Load();
-        //ColumnRotate.singleton.Load();
+        //Ball.singleton.Load();      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Cursor.visible = false;
     }
