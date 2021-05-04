@@ -99,7 +99,7 @@ public class PlayerManager : MonoBehaviour
         if (_currentHealth <= 0)
         {
             _currentHealth = 0;
-            Time.timeScale = 0f;
+            StopGame();
             bestScore = Mathf.Max(bestScore, (int)currentScore);
             PlayerDie();
         }
@@ -179,5 +179,9 @@ public class PlayerManager : MonoBehaviour
 
         Save();
     }
+    #endregion
+
+    #region Another Functions
+    private void StopGame() => Time.timeScale = 0f;
     #endregion
 }
