@@ -41,13 +41,13 @@ public class Ball : MonoBehaviour
     void Awake()
     {
         singleton = this;
-        PlatformManager.BallHit += Hit;
-        PlatformManager.Goal += Goal;
+        //PlatformManager.BallHit += Hit;
+        //PlatformManager.Goal += Goal;
     }
     private void OnDestroy()
     {
-        PlatformManager.BallHit -= Hit;
-        PlatformManager.Goal -= Goal;
+        //PlatformManager.BallHit -= Hit;
+        //PlatformManager.Goal -= Goal;
     }
 
     private void FixedUpdate()

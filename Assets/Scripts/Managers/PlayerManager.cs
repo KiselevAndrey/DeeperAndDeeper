@@ -42,13 +42,11 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         singleton = this;
-        PlatformManager.BallHit += Hit;
-        PlatformManager.Goal += Goal;
+        PlatformManager.Collision += CollisionTreatment;
     }
     private void OnDestroy()
     {
-        PlatformManager.BallHit -= Hit;
-        PlatformManager.Goal -= Goal;
+        PlatformManager.Collision -= CollisionTreatment;
     }
     #endregion
 
@@ -63,9 +61,26 @@ public class PlayerManager : MonoBehaviour
         AddMoney(_goalsWithoutHit * goalMultiplier);
     }
 
-    private void Hit(int damage)
+    private void CollisionTreatment(Vector3 collisionPos, int damage, PlatformManager.Type platformType)
     {
+        switch (platformType)
+        {
+            case PlatformManager.Type.Exit:
+                ChangeState(States.Fall);
+                break;
 
+            case PlatformManager.Type.Trap:
+            case PlatformManager.Type.Normal:
+                ChangeState(States.Jump);
+                break;
+
+            case PlatformManager.Type.Start:
+                ChangeState(States.Jump);
+                break;
+
+            default:
+                break;
+        }
     }
     #endregion
 
@@ -92,12 +107,12 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region State
-    public void ChangeState(States newState)
+    private void ChangeState(States newState)
     {
         if (_currentState == newState) return;
-
+        
         _currentState = newState;
-        switch (_currentState)
+        switch (newState)
         {
             case States.Fall:
                 _animator.SetTrigger("Fall");

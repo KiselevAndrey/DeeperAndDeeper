@@ -19,11 +19,13 @@ public class ColumnManager : MonoBehaviour
 
     private List<FloorManager> _floors = new List<FloorManager>();
     private int _currentFloorIndex;
+    private PlayerManager player;
 
     #region Start Awake OnDestroy
     private void Start()
     {        
         CreateFloors();
+        player = PlayerManager.singleton;
     }
 
     private void Awake()
@@ -55,15 +57,15 @@ public class ColumnManager : MonoBehaviour
     /// <summary> Check over which platform the player is located </summary>
     private void CheckPlayerPos()
     {
-        if(_currentFloorIndex < _floors.Count)
-            CurrentFloor().CheckPlayersPlatform();
+        if (_currentFloorIndex >= _floors.Count) return;
+
+        CurrentFloor().CheckPlayersPlatform();
     }
     #endregion
 
     #region NewPosition
     private void NewPosition()
     {
-        print(transform.name + " NewPos");
         Vector3 newPos = nextManager.transform.position;
         newPos.y -= nextManager.height;
         transform.position = newPos;
@@ -73,21 +75,46 @@ public class ColumnManager : MonoBehaviour
         _floors.Clear();
         CreateFloors();
     }
+    #endregion
 
-    private Vector3 GetPosFloor(int index)
+    #region UpColumnToNextFloor
+    private void UpColumnToNextFloor()
     {
-        if (_floors[index])
-            return _floors[index].transform.position;
-        else
-            return transform.position;
+        if (_currentFloorIndex < _floors.Count) StartCoroutine(MoveToNextFloor());
+        else nextManager.UpColumnToNextFloor();
+    }
+
+    private IEnumerator MoveToNextFloor()
+    {
+        while (CurrentFloorsPosY() < player.transform.position.y)
+        {
+            float upDistance = moveUpSpeed * Time.fixedDeltaTime;
+            UpColumn(upDistance);
+            nextManager.UpColumn(upDistance);
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+
+        float backDistance = CurrentFloorsPosY() - player.transform.position.y;
+        UpColumn(-backDistance);
+        nextManager.UpColumn(-backDistance);
+
+        CheckPlayerPos();
+    }
+
+    private void UpColumn(float upDistance)
+    {
+        Vector3 newPos = transform.position;
+        newPos.y += upDistance;
+        transform.position = Vector3.MoveTowards(transform.position, newPos, moveUpSpeed);
     }
     #endregion
 
+    #region Floor
     #region CreateFloor
     private void CreateFloors()
     {
         float yPos = startingPosY;
-        
+
         float yDist = floorsDistance.y - difficult * 0.1f;
         yDist = yDist > floorsDistance.x ? yDist : floorsDistance.x;
 
@@ -110,46 +137,24 @@ public class ColumnManager : MonoBehaviour
     }
     #endregion
 
-    #region UpColumnToNextFloor
-    private void UpColumnToNextFloor()
+    private Vector3 GetPosFloor(int index)
     {
-        PlayerManager.singleton.ChangeState(PlayerManager.States.Fall);
-        if (_currentFloorIndex < _floors.Count) StartCoroutine(MoveToNextFloor());
-        else nextManager.UpColumnToNextFloor();
+        if (_floors[index])
+            return _floors[index].transform.position;
+        else
+            return transform.position;
     }
-
-    private IEnumerator MoveToNextFloor()
-    {
-        while (CurrentFloorsPosY() < PlayerManager.singleton.transform.position.y)
-        {
-            float upDistance = moveUpSpeed * Time.fixedDeltaTime;
-            UpColumn(upDistance);
-            nextManager.UpColumn(upDistance);
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
-        }
-
-        float backDistance = CurrentFloorsPosY() - PlayerManager.singleton.transform.position.y;
-        UpColumn(-backDistance);
-        nextManager.UpColumn(-backDistance);
-
-        PlayerManager.singleton.ChangeState(PlayerManager.States.Jump);
-    }
-
-    private void UpColumn(float upDistance)
-    {
-        Vector3 newPos = transform.position;
-        newPos.y += upDistance;
-        transform.position = Vector3.MoveTowards(transform.position, newPos, moveUpSpeed);
-    }
-    #endregion
 
     #region CurrentFloor
     private FloorManager CurrentFloor() => _floors[_currentFloorIndex];
+
     private float CurrentFloorsPosY() => GetPosFloor(_currentFloorIndex).y;
+
     private bool CurrentFloorsPosY(float y)
     {
         if (_currentFloorIndex >= _floors.Count) return false;
         return CurrentFloorsPosY() == y;
     }
+    #endregion
     #endregion
 }
