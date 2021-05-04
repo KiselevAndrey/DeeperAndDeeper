@@ -184,4 +184,22 @@ public class PlayerManager : MonoBehaviour
     #region Another Functions
     private void StopGame() => Time.timeScale = 0f;
     #endregion
+
+    #region Shoping
+    public void BuyHealth()
+    {
+        maxHealth++;
+        healthBonusPurchased++;
+    }
+    public void BuyGoldMultiplied()
+    {
+        goalMultiplier++;
+        goldAddedBonusPurchased++;
+    }
+
+    public void BuyPunching()
+    {
+        punchingBonusPurchased++;
+    }
+    #endregion
 }

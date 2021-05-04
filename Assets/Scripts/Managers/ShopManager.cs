@@ -14,17 +14,17 @@ public class ShopManager : MonoBehaviour
     [Header("Additional options")]
     [SerializeField] GameObject noMoney;
 
-    Ball _ball;
-    ColumnRotate _columnRotate;
+    PlayerManager _player;
+    //ColumnRotate _columnRotate;
     int _noMoneyCount;
 
     void Start()
     {
-        _ball = gameObject.AddComponent<Ball>(); 
-        _columnRotate = gameObject.AddComponent<ColumnRotate>();
+        _player = gameObject.AddComponent<PlayerManager>(); 
+        //_columnRotate = gameObject.AddComponent<ColumnRotate>();
 
-        _ball.Load(true);
-        _columnRotate.Load();
+        _player.Load(true);
+        //_columnRotate.Load();
 
         UpdateTexts();
     }
@@ -32,10 +32,10 @@ public class ShopManager : MonoBehaviour
     #region UpdateTexts
     void UpdateTexts()
     {
-        UpdateText(moneyText, Ball.FloatToString(_ball.money));
-        UpdateText(healthPrice, Ball.FloatToString(CalculatePrice(_ball.healthBonusPurchased)));
-        UpdateText(goldMultipliedPrice, Ball.FloatToString(CalculatePrice(_ball.goldAddedBonusPurchased)));
-        UpdateText(punchingPrice, Ball.FloatToString(CalculatePrice(_ball.punchingBonusPurchased)));
+        UpdateText(moneyText, PlayerManager.FloatToString(_player.money));
+        UpdateText(healthPrice, PlayerManager.FloatToString(CalculatePrice(_player.healthBonusPurchased)));
+        UpdateText(goldMultipliedPrice, PlayerManager.FloatToString(CalculatePrice(_player.goldAddedBonusPurchased)));
+        UpdateText(punchingPrice, PlayerManager.FloatToString(CalculatePrice(_player.punchingBonusPurchased)));
     }
 
     void UpdateText(Text text, string str) => text.text = str;
@@ -46,50 +46,50 @@ public class ShopManager : MonoBehaviour
     #region TryBuy
     public void TryBuyHealth()
     {
-        int price = CalculatePrice(_ball.healthBonusPurchased);
-        if (price > _ball.money)
+        int price = CalculatePrice(_player.healthBonusPurchased);
+        if (price > _player.money)
         {
             StartCoroutine(NoMoney(++_noMoneyCount));
             return;
         }
 
-        _ball.money -= price;
-        _ball.BuyHealth();
+        _player.money -= price;
+        _player.BuyHealth();
 
-        UpdateText(moneyText, Ball.FloatToString(_ball.money));
-        UpdateText(healthPrice, Ball.FloatToString(CalculatePrice(_ball.healthBonusPurchased)));
+        UpdateText(moneyText, PlayerManager.FloatToString(_player.money));
+        UpdateText(healthPrice, PlayerManager.FloatToString(CalculatePrice(_player.healthBonusPurchased)));
     }
 
     public void TryBuyGoldMultiplier()
     {
-        int price = CalculatePrice(_ball.goldAddedBonusPurchased);
-        if (price > _ball.money)
+        int price = CalculatePrice(_player.goldAddedBonusPurchased);
+        if (price > _player.money)
         {
             StartCoroutine(NoMoney(++_noMoneyCount));
             return;
         }
 
-        _ball.money -= price;
-        _ball.BuyGoldMultiplied();
+        _player.money -= price;
+        _player.BuyGoldMultiplied();
 
-        UpdateText(moneyText, Ball.FloatToString(_ball.money));
-        UpdateText(goldMultipliedPrice, Ball.FloatToString(CalculatePrice(_ball.goldAddedBonusPurchased)));
+        UpdateText(moneyText, PlayerManager.FloatToString(_player.money));
+        UpdateText(goldMultipliedPrice, PlayerManager.FloatToString(CalculatePrice(_player.goldAddedBonusPurchased)));
     }
     
     public void TryBuyPunching()
     {
-        int price = CalculatePrice(_ball.punchingBonusPurchased);
-        if (price > _ball.money)
+        int price = CalculatePrice(_player.punchingBonusPurchased);
+        if (price > _player.money)
         {
             StartCoroutine(NoMoney(++_noMoneyCount));
             return;
         }
 
-        _ball.money -= price;
-        _ball.BuyPunching();
+        _player.money -= price;
+        _player.BuyPunching();
 
-        UpdateText(moneyText, Ball.FloatToString(_ball.money));
-        UpdateText(punchingPrice, Ball.FloatToString(CalculatePrice(_ball.punchingBonusPurchased)));
+        UpdateText(moneyText, PlayerManager.FloatToString(_player.money));
+        UpdateText(punchingPrice, PlayerManager.FloatToString(CalculatePrice(_player.punchingBonusPurchased)));
     }
 
     IEnumerator NoMoney(int count)
@@ -105,8 +105,8 @@ public class ShopManager : MonoBehaviour
     #region ExitShop
     public void ExitShop()
     {
-        _ball.Save();
-        _columnRotate.Save();
+        _player.Save();
+        //_columnRotate.Save();
     }
     #endregion
 }

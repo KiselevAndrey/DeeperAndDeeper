@@ -4778,7 +4778,7 @@ MonoBehaviour:
   _animator: {fileID: 1700707566}
   maxHealth: 3
   startScale: 1
-  minScale: 0.1
+  minScale: 0.3
   healthText: {fileID: 1521193230}
   goalMultiplier: 1
   moneyText: {fileID: 790119829}
