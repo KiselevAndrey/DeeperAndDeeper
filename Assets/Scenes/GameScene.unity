@@ -4777,7 +4777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 1700707566}
   maxHealth: 3
-  startScale: 0.3
+  startScale: 1
   minScale: 0.1
   healthText: {fileID: 1521193230}
   goalMultiplier: 1

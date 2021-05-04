@@ -7,18 +7,18 @@ public class MenuManager : MonoBehaviour
     [SerializeField] GameObject howPlay;
     [SerializeField] Text howPlayText;
 
-    Ball _ball;
+    PlayerManager _player;
     int _howPlayIndex;
 
     void Start()
     {
-        _ball = gameObject.AddComponent<Ball>();
-        _ball.Load(true);
+        _player = gameObject.AddComponent<PlayerManager>();
+        _player.Load(true);
     }
 
     public void ResetPlayer(bool delRecord)
     {
-        _ball.ResetMe(delRecord);
+        _player.ResetMe(delRecord);
     }
 
     #region HowPlay
@@ -36,8 +36,8 @@ public class MenuManager : MonoBehaviour
         "White platforms do not cause damage",
         "Green platforms take 1 damage",
         "Red platforms take more than 1 damage depending on the level",
-        "Platform is navigated with the mouse, moving it from the middle of the screen"
-        //"Thanks for music!\nSpook4 от PeriTune | http://peritune.com Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0 Music promoted by https://www.chosic.com/ "
+        "Platform is navigated with the mouse, moving it from the middle of the screen",
+        "Thanks for music!\nSpook4 от PeriTune | http://peritune.com Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0 Music promoted by https://www.chosic.com/ "
         };
 
         print(index);

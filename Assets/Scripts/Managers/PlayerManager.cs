@@ -55,23 +55,20 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Starts from event
-    private void Goal(Vector3 goalPos, int addedScore)
-    {
-        _goalsWithoutHit += addedScore;
-        AddMoney(_goalsWithoutHit * goalMultiplier);
-    }
-
     private void CollisionTreatment(Vector3 collisionPos, int damage, PlatformManager.Type platformType)
     {
         switch (platformType)
         {
             case PlatformManager.Type.Exit:
                 ChangeState(States.Fall);
+                _goalsWithoutHit += damage;
+                AddMoney(_goalsWithoutHit * goalMultiplier);
                 break;
 
             case PlatformManager.Type.Trap:
             case PlatformManager.Type.Normal:
                 ChangeState(States.Jump);
+                Hit(damage);
                 break;
 
             case PlatformManager.Type.Start:
@@ -81,6 +78,32 @@ public class PlayerManager : MonoBehaviour
             default:
                 break;
         }
+    }
+    #endregion
+
+    #region Hit
+    void SetScale()
+    {
+        float percentHealth = (float)_currentHealth / maxHealth;
+        transform.localScale = Vector3.one * Mathf.Lerp(minScale, startScale, percentHealth);
+    }
+
+    void Hit(int damage)
+    {
+        if (damage <= 0) return;
+
+        _goalsWithoutHit = 0;
+        _currentHealth -= damage;
+        healthText.text = _currentHealth.ToString();
+
+        if (_currentHealth <= 0)
+        {
+            _currentHealth = 0;
+            Time.timeScale = 0f;
+            bestScore = Mathf.Max(bestScore, (int)currentScore);
+            PlayerDie();
+        }
+        SetScale();
     }
     #endregion
 
@@ -125,6 +148,36 @@ public class PlayerManager : MonoBehaviour
             default:
                 break;
         }
+    }
+    #endregion
+
+    #region Save Load Reset
+    public void Save() => SaveSystem.SavePlayer(this);
+
+    public void Load(bool notPlaying = false)
+    {
+        SaveSystem.LoadPlayer()?.LoadData(ref singleton);
+
+        _notPlaying = notPlaying;
+        if (notPlaying) return;
+
+        _currentHealth = maxHealth;
+        healthText.text = _currentHealth.ToString();
+        SetScale();
+        AddMoney(0);
+    }
+
+    public void ResetMe(bool delBestScore)
+    {
+        maxHealth = 3;
+        goalMultiplier = 1;
+        money = 0;
+        healthBonusPurchased = 0;
+        goldAddedBonusPurchased = 0;
+        punchingBonusPurchased = 0;
+        if (delBestScore) bestScore = 0;
+
+        Save();
     }
     #endregion
 }
