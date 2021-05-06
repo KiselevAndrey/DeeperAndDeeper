@@ -14,6 +14,7 @@ public class ColumnRotate : MonoBehaviour
     private CurrentPlatform _currentPlatform;
     private Swiper _swiper;
     private bool _notPlaying;
+    private float _maxSwiperLength;
     
 
     #region Awake Start Update
@@ -32,6 +33,8 @@ public class ColumnRotate : MonoBehaviour
             Camera camera = Camera.main;
             _swiper.startPressPos = new Vector2(camera.pixelWidth / 2, camera.pixelHeight / 2);
         }
+
+        _maxSwiperLength = Camera.main.pixelWidth / 2;
     }
 
     void Update()
@@ -52,6 +55,7 @@ public class ColumnRotate : MonoBehaviour
                 _swiper.endPressPos = mousePos;
 
                 float swipeRotate = _swiper.Swipe(Swiper.DirectionName.Horizontal);
+                swipeRotate = Mathf.Min(Mathf.Abs(swipeRotate), _maxSwiperLength) * (swipeRotate < 0 ? -1 : 1);
 
                 Vector3 arrowScale = Vector3.one;
                 arrowScale.x = swipeRotate / 100;
@@ -65,6 +69,7 @@ public class ColumnRotate : MonoBehaviour
 
                 transform.rotation = Quaternion.Euler(rotate);
                 break;
+
             case CurrentPlatform.Android:
                 break;
             default:

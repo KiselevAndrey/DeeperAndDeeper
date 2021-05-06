@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlatformManager : MonoBehaviour
 {
-    public enum Type { Exit, Trap, Normal, Start }
+    public enum Type { Exit, Trap, Normal, Start, BonusPunch, BonusLife }
 
     [Header("Main component")]
     [SerializeField] private FloorManager _myFloor;
@@ -12,6 +12,7 @@ public class PlatformManager : MonoBehaviour
     [SerializeField] private Material _trapMaterial;
     [SerializeField] private Material _normalMaterial;
     [SerializeField] private Material _startMaterial;
+    [SerializeField] private Material _bonusMaterial;
 
     [Header("From Player cheking")]
     [SerializeField] private Transform _center;
@@ -20,7 +21,7 @@ public class PlatformManager : MonoBehaviour
     private int _damage = 0;
     private Type _currentType;
 
-    public static Action<Vector3, int, Type> Collision;        // from Player
+    public static Action<int, Type> Collision;         // from Player
     public static Action<Vector3> DestroyPlatform;              // from ColumnManager
 
     #region From FloorManager
@@ -46,9 +47,26 @@ public class PlatformManager : MonoBehaviour
                 GetComponent<Renderer>().material = _startMaterial;
                 _damage = 0;
                 break;
-            default:
+        }
+    }
+
+    public void AddBonus(int difficult)
+    {
+        int bonuses = UnityEngine.Random.Range(0, 2);
+
+        switch (bonuses)
+        {
+            case 0:
+                _currentType = Type.BonusLife;
+                break;
+
+            case 1:
+                _currentType = Type.BonusPunch;
                 break;
         }
+
+        _damage = difficult;
+        GetComponent<Renderer>().material = _bonusMaterial;
     }
     #endregion
 
@@ -67,7 +85,7 @@ public class PlatformManager : MonoBehaviour
 
     private void HittingTreatment()
     {
-        Collision(transform.position, _damage, _currentType);
+        Collision(_damage, _currentType);
 
         switch (_currentType)
         {
@@ -77,15 +95,18 @@ public class PlatformManager : MonoBehaviour
 
             case Type.Trap:
             case Type.Normal:
+            case Type.BonusLife:
+            case Type.BonusPunch:
                 SetType(Type.Start);
                 break;
 
             case Type.Start:
                 break;
-
-            default:
-                break;
         }
     }
+    #endregion
+
+    #region Another Functions
+    public bool ImExit() => _currentType == Type.Exit;
     #endregion
 }

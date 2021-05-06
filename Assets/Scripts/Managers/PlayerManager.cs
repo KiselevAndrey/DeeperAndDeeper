@@ -7,10 +7,11 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager singleton;
-    public enum States { Fall, Jump }
+    public enum States { Fall, Jump, Punching }
 
     public static Action CheckState;
     public static Action PlayerDie;
+    public static Action<Vector3> Punching;
 
     [Header("Main component")]
     [SerializeField] private Animator _animator;
@@ -34,7 +35,6 @@ public class PlayerManager : MonoBehaviour
    
     private int _currentHealth;
     private int _goalsWithoutHit;
-    private bool _notPlaying;
     private int _punchingCount;
     private States _currentState;
 
@@ -55,7 +55,53 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Starts from event
-    private void CollisionTreatment(Vector3 collisionPos, int damage, PlatformManager.Type platformType)
+    private void CollisionTreatment(int damage, PlatformManager.Type platformType)
+    {
+
+        if (_punchingCount > 0)
+        {
+            CollisionTreatmentPunching(damage, platformType);
+        }
+        else
+        {
+            CollisionTreatmentNormal(damage, platformType);
+        }
+    }
+
+    private void CollisionTreatmentPunching(int damage, PlatformManager.Type platformType)
+    {
+        ChangeState(States.Punching, true);
+        switch (platformType)
+        {
+            case PlatformManager.Type.Exit:
+                _goalsWithoutHit += damage;
+                AddMoney(_goalsWithoutHit * goalMultiplier);
+                _punchingCount++;
+                break;
+
+            case PlatformManager.Type.Trap:
+                Hit(damage / 2);
+                break;
+
+            case PlatformManager.Type.Normal:
+                AddMoney(_goalsWithoutHit * goalMultiplier);
+                break;
+
+            case PlatformManager.Type.Start:
+                AddMoney(_goalsWithoutHit * goalMultiplier);
+                break;
+
+            case PlatformManager.Type.BonusPunch:
+                AddPunching(damage);
+                break;
+
+            case PlatformManager.Type.BonusLife:
+                AddHealth(damage);
+                break;
+        }
+    }
+
+    private void CollisionTreatmentNormal(int damage, PlatformManager.Type platformType)
     {
         switch (platformType)
         {
@@ -75,7 +121,14 @@ public class PlayerManager : MonoBehaviour
                 ChangeState(States.Jump);
                 break;
 
-            default:
+            case PlatformManager.Type.BonusPunch:
+                ChangeState(States.Jump);
+                AddPunching(damage);
+                break;
+
+            case PlatformManager.Type.BonusLife:
+                ChangeState(States.Jump);
+                AddHealth(damage);
                 break;
         }
     }
@@ -93,8 +146,7 @@ public class PlayerManager : MonoBehaviour
         if (damage <= 0) return;
 
         _goalsWithoutHit = 0;
-        _currentHealth -= damage;
-        healthText.text = _currentHealth.ToString();
+        AddHealth(-damage);
 
         if (_currentHealth <= 0)
         {
@@ -104,6 +156,12 @@ public class PlayerManager : MonoBehaviour
             PlayerDie();
         }
         SetScale();
+    }
+
+    private void AddHealth(int value)
+    {
+        _currentHealth += value;
+        healthText.text = _currentHealth.ToString();
     }
     #endregion
 
@@ -130,11 +188,10 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region State
-    private void ChangeState(States newState)
+    private void ChangeState(States newState, bool changeAlways = false)
     {
-        if (_currentState == newState) return;
+        if (_currentState == newState && !changeAlways) return;
         
-        _currentState = newState;
         switch (newState)
         {
             case States.Fall:
@@ -145,9 +202,13 @@ public class PlayerManager : MonoBehaviour
                 _animator.SetTrigger("Jump");
                 break;
 
-            default:
+            case States.Punching:
+                if (_currentState != newState) _animator.SetTrigger("Punching");
+                _punchingCount--;
+                Punching(transform.position);
                 break;
         }
+        _currentState = newState;
     }
     #endregion
 
@@ -158,13 +219,13 @@ public class PlayerManager : MonoBehaviour
     {
         SaveSystem.LoadPlayer()?.LoadData(ref singleton);
 
-        _notPlaying = notPlaying;
         if (notPlaying) return;
 
         _currentHealth = maxHealth;
         healthText.text = _currentHealth.ToString();
         SetScale();
         AddMoney(0);
+        ChangeState(States.Fall);
     }
 
     public void ResetMe(bool delBestScore)
@@ -200,6 +261,14 @@ public class PlayerManager : MonoBehaviour
     public void BuyPunching()
     {
         punchingBonusPurchased++;
+    }
+    #endregion
+
+    #region Bonuses
+    private void AddPunching(int value)
+    {
+        _punchingCount += value;
+        ChangeState(States.Punching, true);
     }
     #endregion
 }

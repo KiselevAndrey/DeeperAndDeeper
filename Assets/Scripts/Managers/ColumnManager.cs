@@ -19,25 +19,27 @@ public class ColumnManager : MonoBehaviour
 
     private List<FloorManager> _floors = new List<FloorManager>();
     private int _currentFloorIndex;
-    private PlayerManager player;
+    private PlayerManager _player;
 
     #region Start Awake OnDestroy
     private void Start()
     {        
         CreateFloors();
-        player = PlayerManager.singleton;
+        _player = PlayerManager.singleton;
     }
 
     private void Awake()
     {
         PlatformManager.DestroyPlatform += DestroyPlatform;
         PlayerManager.CheckState += CheckPlayerPos;
+        PlayerManager.Punching += DestroyPlatform;
     }
 
     private void OnDestroy()
     {
         PlatformManager.DestroyPlatform -= DestroyPlatform;
         PlayerManager.CheckState -= CheckPlayerPos;
+        PlayerManager.Punching -= DestroyPlatform;
     }
     #endregion
 
@@ -86,7 +88,7 @@ public class ColumnManager : MonoBehaviour
 
     private IEnumerator MoveToNextFloor()
     {
-        while (CurrentFloorsPosY() < player.transform.position.y)
+        while (CurrentFloorsPosY() < _player.transform.position.y)
         {
             float upDistance = moveUpSpeed * Time.fixedDeltaTime;
             UpColumn(upDistance);
@@ -94,7 +96,7 @@ public class ColumnManager : MonoBehaviour
             yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
 
-        float backDistance = CurrentFloorsPosY() - player.transform.position.y;
+        float backDistance = CurrentFloorsPosY() - _player.transform.position.y;
         UpColumn(-backDistance);
         nextManager.UpColumn(-backDistance);
 
@@ -134,6 +136,18 @@ public class ColumnManager : MonoBehaviour
             _floors[i].SetPlatform(difficult);
 
         _currentFloorIndex = 0;
+
+        GetBonuses();
+    }
+
+    private void GetBonuses()
+    {
+        int bonusCount = Random.Range(0, 5);
+
+        for (int i = 0; i < bonusCount; i++)
+        {
+            _floors[Random.Range(1, _floors.Count)].SetBonusPlatform(difficult);
+        }
     }
     #endregion
 

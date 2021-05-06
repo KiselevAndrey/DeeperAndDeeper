@@ -40,7 +40,23 @@ public class FloorManager : MonoBehaviour
         }
     }
 
+    public void SetBonusPlatform(int difficult)
+    {
+        RandomNotExitPlatform().AddBonus(difficult);
+    }
+
     private PlatformManager RandomPlatform() => platforms[Random.Range(0, platforms.Count)];
+    
+    private PlatformManager RandomNotExitPlatform()
+    {
+        int i;
+        do
+        {
+           i  = Random.Range(0, platforms.Count);
+        } while (platforms[i].ImExit());
+
+        return platforms[i];
+    }
     #endregion
 
     public void StartDestroyMe()
