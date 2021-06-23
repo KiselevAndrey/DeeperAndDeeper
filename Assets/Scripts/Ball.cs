@@ -37,17 +37,17 @@ public class Ball : MonoBehaviour
 
     public static Action PlayerDie;
 
-    #region Awake OnDestroy Start Update
+    #region Awake OnDestroy Update
     void Awake()
     {
         singleton = this;
-        PlatformManager.BallHit += Hit;
-        PlatformManager.Goal += Goal;
+        //PlatformManager.BallHit += Hit;
+        //PlatformManager.Goal += Goal;
     }
     private void OnDestroy()
     {
-        PlatformManager.BallHit -= Hit;
-        PlatformManager.Goal -= Goal;
+        //PlatformManager.BallHit -= Hit;
+        //PlatformManager.Goal -= Goal;
     }
 
     private void FixedUpdate()

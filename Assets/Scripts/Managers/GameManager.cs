@@ -11,12 +11,12 @@ public class GameManager : MonoBehaviour
     #region Awake OnDestroy Start
     private void Awake()
     {
-        Ball.PlayerDie += PlayerDie;
+        PlayerManager.PlayerDie += PlayerDie;
     }
 
     private void OnDestroy()
     {
-        Ball.PlayerDie -= PlayerDie;
+        PlayerManager.PlayerDie -= PlayerDie;
     }
 
     private void Start()
@@ -25,22 +25,21 @@ public class GameManager : MonoBehaviour
         afterGameUI.SetActive(false);
         Time.timeScale = 1f;
 
-        Ball.singleton.Load();
-        //ColumnRotate.singleton.Load();
-
+        PlayerManager.singleton.Load();
+        
         Cursor.visible = false;
     }
     #endregion
 
     void PlayerDie()
     {
-        Ball.singleton.Save();
+        PlayerManager.singleton.Save();
 
         gameUI.SetActive(false);
         afterGameUI.SetActive(true);
 
-        string score = "Current score: " + Ball.singleton.currentScore;
-        score += "\nBest score: " + Ball.singleton.bestScore;
+        string score = "Current score: " + PlayerManager.singleton.currentScore;
+        score += "\nBest score: " + PlayerManager.singleton.bestScore;
         scoreText.text = score;
         Cursor.visible = true;
     }
