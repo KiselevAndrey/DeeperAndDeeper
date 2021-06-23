@@ -11,6 +11,10 @@ public class ClipListSO : ScriptableObject
     public bool shuffleClip;
 
     int _i;
+    private void Awake()
+    {
+        if (shuffleClip) Shuffle();
+    }
 
     public AudioClip NextClip(ref float clipLength)
     {
